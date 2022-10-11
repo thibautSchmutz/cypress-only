@@ -16,7 +16,9 @@ Cypress.Commands.add("login", (email, password) => {
       cy.get("#email").clear().type(email);
       cy.get("#password").clear().type(password);
       cy.get("#submit").click();
-      cy.url().should("contain", "/home");
+      cy.url().should(($url) => {
+        expect($url).to.contain("/home");
+      });
     },
     {
       validate() {
