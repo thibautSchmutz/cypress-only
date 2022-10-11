@@ -9,7 +9,7 @@ const individual = {
 
 describe("individuals : create", () => {
   beforeEach(() => {
-    cy.login("admin@sellsy.com", "admin");
+    cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
   });
 
   context("context 1", function () {
