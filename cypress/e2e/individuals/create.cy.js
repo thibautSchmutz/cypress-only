@@ -1,5 +1,3 @@
-const url = "https://app.slsy.io/individuals/create";
-
 const individual = {
   firstname: "Jacques",
   name: "Weber",
@@ -11,13 +9,13 @@ const individual = {
 
 describe("individuals : create", () => {
   beforeEach(() => {
-    cy.login();
+    cy.login("admin@sellsy.com", "admin");
   });
 
   context("context 1", function () {
     it("should create a user", () => {
       // ARRANGE
-      cy.visit(url);
+      cy.visit("https://app.slsy.io/individuals/create");
 
       // ACT
       cy.get(
@@ -66,6 +64,11 @@ describe("individuals : create", () => {
       ).should(($email) => {
         expect($email).to.contain(individual.email);
       });
+    });
+
+    it("should have the created user in the listing", () => {
+      // ARRANGE
+      cy.visit("https://app.slsy.io/directory/individuals");
     });
   });
 });

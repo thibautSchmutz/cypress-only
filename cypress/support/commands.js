@@ -8,10 +8,20 @@ Cypress.on("uncaught:exception", (err) => {
 });
 
 // Login
-Cypress.Commands.add("login", () => {
-  cy.visit("https://login.slsy.io/login");
-
-  cy.get("#email").clear().type("admin@sellsy.com");
-  cy.get("#password").clear().type("admin");
-  cy.get("#submit").click();
+Cypress.Commands.add("login", (email, password) => {
+  cy.session(
+    [email, password],
+    () => {
+      cy.visit("https://login.slsy.io/login");
+      cy.get("#email").clear().type(email);
+      cy.get("#password").clear().type(password);
+      cy.get("#submit").click();
+      cy.url().should("contain", "/home");
+    },
+    {
+      validate() {
+        cy.visit("https://app.slsy.io/home");
+      },
+    }
+  );
 });
