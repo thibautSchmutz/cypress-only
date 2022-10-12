@@ -12,7 +12,7 @@ Cypress.Commands.add("login", (email, password) => {
   cy.session(
     [email, password],
     () => {
-      cy.visit("https://login.slsy.io/login");
+      cy.visit(Cypress.env("LOGIN_URL"));
       cy.get("#email").clear().type(email);
       cy.get("#password").clear().type(password);
       cy.get("#submit").click();

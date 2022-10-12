@@ -15,7 +15,7 @@ describe("individuals : create", () => {
   context("context 1", function () {
     it("should create a user", () => {
       // ARRANGE
-      cy.visit("https://app.slsy.io/individuals/create");
+      cy.visit("/individuals/create");
 
       // ACT
       cy.get(
@@ -68,7 +68,14 @@ describe("individuals : create", () => {
 
     it("should have the created user in the listing", () => {
       // ARRANGE
-      cy.visit("https://app.slsy.io/directory/individuals");
+      cy.visit("/directory/individuals");
+
+      // ASSERT
+      cy.get(".el-table__row")
+        .first()
+        .should(($row) => {
+          expect($row).to.contain(individual.name);
+        });
     });
   });
 });
