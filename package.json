@@ -13,5 +13,8 @@
   "license": "ISC",
   "devDependencies": {
     "cypress": "^10.9.0"
+  },
+  "dependencies": {
+    "@ngneat/falso": "^6.1.0"
   }
 }
