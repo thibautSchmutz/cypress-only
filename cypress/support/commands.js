@@ -7,7 +7,21 @@ Cypress.on("uncaught:exception", (err) => {
   }
 });
 
-// Login
+// OVERWRITES
+Cypress.Commands.overwrite(
+  "type",
+  (originalFn, subject, text, options = {}) => {
+    options.delay = 0;
+    return originalFn(subject, text, options);
+  }
+);
+
+// EXTENDS
+Cypress.Commands.add("waitReq", (apiCall) => {
+  return cy.wait(apiCall, { timeout: 10000 });
+});
+
+// CUSTOM COMMANDS
 Cypress.Commands.add("login", (email, password) => {
   cy.session(
     [email, password],

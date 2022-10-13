@@ -1,0 +1,21 @@
+{
+  "Boilerplate for Cypress test": {
+    "scope": "javascript",
+    "prefix": "cy",
+    "body": [
+      "// import data from './_data';",
+      "",
+      "describe('${1:scope}', () => {",
+      "  beforeEach(() => {",
+      "    cy.login(Cypress.env('USER_EMAIL'), Cypress.env('USER_PASSWORD'));",
+      "  });",
+      "  ",
+      "  it('${2:testName}', () => {",
+      "  // ARRANGE",
+      "  // ACT",
+      "  // ASSERT",
+      "  })",
+      "});"
+    ]
+  }
+}
