@@ -1,7 +1,6 @@
 // DO NOT PRINT RESIZE ERRORS
-const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/;
 Cypress.on("uncaught:exception", (err) => {
-  /* returning false here prevents Cypress from failing the test */
+  const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/;
   if (resizeObserverLoopErrRe.test(err.message)) {
     return false;
   }
@@ -17,8 +16,8 @@ Cypress.Commands.overwrite(
 );
 
 // EXTENDS
-Cypress.Commands.add("waitReq", (apiCall) => {
-  return cy.wait(apiCall, { timeout: 10000 });
+Cypress.Commands.add("getByDataBot", (dataBotName, ...args) => {
+  return cy.get(`[data-bot=${dataBotName}]`, ...args);
 });
 
 // CUSTOM COMMANDS
@@ -36,7 +35,7 @@ Cypress.Commands.add("login", (email, password) => {
     },
     {
       validate() {
-        cy.visit("https://app.slsy.io/home");
+        cy.visit("/home");
       },
     }
   );

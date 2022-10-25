@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "npx cypress open -C cypress.dev.config.js",
-    "staging": "npx cypress open -C cypress.staging.config.js",
-    "prod": "npx cypress open -C cypress.prod.config.js"
+    "dev": "npx cypress open -C cypress.develop.config.mjs",
+    "staging": "npx cypress open -C cypress.staging.config.mjs",
+    "prod": "npx cypress open -C cypress.production.config.mjs",
+    "test-data": "node --experimental-modules _data.js"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +16,5 @@
   "devDependencies": {
     "cypress": "^10.9.0"
   },
-  "dependencies": {
-    "@ngneat/falso": "^6.1.0"
-  }
+  "dependencies": {}
 }

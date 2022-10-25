@@ -17,5 +17,29 @@
       "  })",
       "});"
     ]
+  },
+  "Boilerplate for Random function": {
+    "scope": "javascript",
+    "prefix": "rand",
+    "body": [
+      "// import { randomize } from '../helpers/_randomize.js';",
+      "",
+      "/**",
+      " * => Generate a random ${1:topic}",
+      " *",
+      " * @params ",
+      " *",
+      " * @example",
+      " * ```js",
+      " * rand${1:topic}()",
+      " * ```",
+      " *",
+      " */",
+      "const rand${1:topic} = () => {",
+      "  return ",
+      "}",
+      "",
+      "export { rand${1:topic} }"
+    ]
   }
 }
