@@ -16,5 +16,8 @@
   "devDependencies": {
     "cypress": "^10.9.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@testing-library/cypress": "^8.0.3",
+    "cypress-if": "^1.10.1"
+  }
 }

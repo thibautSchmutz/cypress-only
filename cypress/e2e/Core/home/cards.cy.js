@@ -11,12 +11,13 @@ describe("Home", () => {
     cy.get("@cards").its("length").should("be.gte", 1);
   });
 
-  it.only("should be able to add a card from dashboard dropdown", () => {
-    cy.get(".el-button").as("btn-gerer_tableau_bord");
-    cy.get("@btn-gerer_tableau_bord").click({ force: true });
+  it("should be able to add a card from dashboard dropdown", () => {
+    cy.get(".el-button").as("handle_dashboard");
+    cy.get("@handle_dashboard").click({ force: true });
 
-    cy.get(".el-checkbox__input").not(".is-checked").as("options_non_cochées");
-    cy.get("@options_non_cochées").first().click({ force: true });
+    cy.get(".el-checkbox__input").not(".is-checked").as("unchecked_options");
+    cy.get("@unchecked_options").first().click({ force: true });
+
     // cy.get("@options_non_cochées").then(($checkboxes) => {
     //   let text = $checkboxes.first().get(".el-checkbox__label");
     // });
