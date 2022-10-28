@@ -1,20 +1,22 @@
 import createRandomClient from "./_data";
 
-describe("client : is in listing", () => {
-  beforeEach(() => {
-    cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
-  });
+describe("client : find in listing", () => {
+  let client;
 
-  const client = createRandomClient();
+  before(() => {
+    cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
+    client = createRandomClient();
+    cy.createClient(client);
+  });
 
   it("created client should be found in the client listing", () => {
     // ARRANGE
     cy.intercept("POST", "/listing/clients").as("getListingInfos");
 
-    cy.createClient(client);
     cy.visit("/directory/clients");
     cy.wait("@getListingInfos");
 
+    // ACT
     cy.get(".leftpane").as("filter_panel");
 
     /* Check if any active filters, if so clear them */
@@ -29,7 +31,6 @@ describe("client : is in listing", () => {
       }
     });
 
-    // ACT
     cy.get("@filter_panel").contains("Nom").as("name_filter_btn");
     cy.get("@name_filter_btn").click({ force: true });
 

@@ -411,13 +411,6 @@ cross-spawn@^7.0.0:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-cypress-if@^1.10.1:
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/cypress-if/-/cypress-if-1.10.1.tgz#3f19f3b6c1d8044754ee705ad189a407ea0c9a99"
-  integrity sha512-sZ2Tv7ktKfPehbZzaIzvZg4NZMymFq1AN+HZ9lJIJCq2dQ5sJ6pYBKH49FMe5ErWKmE04hy3GR//ybj0C2E40g==
-  dependencies:
-    debug "^4.3.4"
-
 cypress@^10.9.0:
   version "10.9.0"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-10.9.0.tgz#273a61a6304766f9d6423e5ac8d4a9a11ed8b485"
@@ -485,7 +478,7 @@ debug@^3.1.0:
   dependencies:
     ms "^2.1.1"
 
-debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
+debug@^4.1.1, debug@^4.3.2:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
