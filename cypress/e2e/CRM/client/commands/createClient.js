@@ -66,5 +66,7 @@ module.export = Cypress.Commands.add(
     cy.get("@submit_btn").click({ force: true });
 
     cy.wait("@get_client_infos");
+
+    cy.log("Client created");
   }
 );
