@@ -5,25 +5,35 @@ describe("client : has overview", () => {
 
   before(() => {
     client = createRandomClient();
-
     cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
-
+    cy.deleteAllClients();
     cy.createClient(client);
+  });
 
-    cy.log("access to created client overview through searchbar");
+  it("has an overview with correct infos", () => {
+    const searchTerms = `${client.firstname} ${client.lastName}`;
+
+    cy.intercept("GET", `https://api.slsy.io/v2/search?q=*`).as(
+      "search_results"
+    );
+    cy.intercept("GET", "https://api.slsy.io/v2/staffs*").as("overview_loaded");
+
+    // ACT
     cy.visit("/");
+
     cy.get(
       ".fast-search-input > :nth-child(1) > .el-input > .el-input__inner"
-    ).as("global_search");
-    cy.get("@global_search").type(`${client.firstname} ${client.lastName}`);
+    ).as("global_search_input");
+    cy.get("@global_search_input").type(searchTerms);
+
+    cy.wait("@search_results");
+
     cy.get(".mt-3 > .my-1 > .hover-primary-05-bkg > .pointer > .flex-level").as(
       "client_result_link"
     );
     cy.get("@client_result_link").click({ force: true });
-  });
 
-  it("has an overview with correct infos", () => {
-    // ARRANGE
+    cy.wait("@overview_loaded");
 
     // ASSERT
     cy.get(".overview-root > header").as("overview_header");
@@ -41,6 +51,9 @@ describe("client : has overview", () => {
       "contain",
       `${client.firstname} ${client.lastName}`
     );
+
+    cy.get("@overview_content").should("contain", client.phone);
+    cy.get("@overview_content").should("contain", client.mobile);
     cy.get("@overview_content").should("contain", client.email);
     cy.get("@overview_content").should("contain", client.social.facebook);
     cy.get("@overview_content").should("contain", client.social.linkedin);

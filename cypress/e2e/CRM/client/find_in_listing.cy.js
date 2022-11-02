@@ -4,8 +4,9 @@ describe("client : find in listing", () => {
   let client;
 
   before(() => {
-    cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
     client = createRandomClient();
+    cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
+    cy.deleteAllClients();
     cy.createClient(client);
   });
 
