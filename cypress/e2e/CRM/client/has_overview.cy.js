@@ -42,7 +42,10 @@ describe("client : has overview", () => {
       `${client.firstname} ${client.lastName}`
     );
 
-    cy.getByDataBot("client-overview__menu--general-info").click({
+    cy.getByDataBot("client-overview__menu--general-info").as(
+      "overview_general_infos_btn"
+    );
+    cy.get("@overview_general_infos_btn").click({
       force: true,
     });
 

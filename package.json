@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "npx cypress open -C cypress.develop.config.mjs",
-    "staging": "npx cypress open -C cypress.staging.config.mjs",
-    "prod": "npx cypress open -C cypress.production.config.mjs",
+    "dev": "cypress open -C cypress.develop.config.mjs",
+    "staging": "cypress open -C cypress.staging.config.mjs",
+    "prod": "cypress open -C cypress.production.config.mjs",
     "test-data": "node --experimental-modules _data.js"
   },
   "keywords": [],
