@@ -3,6 +3,9 @@ import "@testing-library/cypress/add-commands";
 // CORE - login
 import "../e2e/Core/login/commands/login.js";
 
+// CORE - home
+import "../e2e/Core/home/commands/clearAllCards.js";
+
 // CRM - client
 import "../e2e/CRM/client/commands/createClient.js";
 import "../e2e/CRM/client/commands/deleteAllClients.js";
