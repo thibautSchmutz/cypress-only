@@ -10,6 +10,9 @@ import "../e2e/Core/home/commands/clearAllCards.js";
 import "../e2e/CRM/client/commands/createClient.js";
 import "../e2e/CRM/client/commands/deleteAllClients.js";
 
+// CRM - contact
+import "../e2e/CRM/contact/commands/createContact.js";
+
 // DO NOT PRINT RESIZE ERRORS
 Cypress.on("uncaught:exception", (err) => {
   const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/;

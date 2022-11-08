@@ -2,6 +2,7 @@
 import { firstName } from "./functions/people/firstName.js";
 import { lastName } from "./functions/people/lastName.js";
 import { job } from "./functions/people/job.js";
+import { date } from "./functions/people/date.js"
 // CONTACT
 import { email } from "./functions/contact/email.js";
 import { phone } from "./functions/contact/phone.js";
@@ -17,6 +18,7 @@ export default {
   firstName,
   lastName,
   job,
+  date,
   email,
   phone,
   facebook,

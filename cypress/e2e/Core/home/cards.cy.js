@@ -15,18 +15,18 @@ describe("Home", () => {
     cy.get("@cards").its("length").should("be.gte", 1);
   });
 
-  it("should be able to add a card from dashboard dropdown", () => {
+  it("should be able to add and remove a card from dashboard dropdown", () => {
     // ARRANGE
     const cardValue = "agenda";
     const cardTitle = "Mon agenda";
     cy.intercept("GET", `/home/card/${cardValue}`).as("add_card_request");
+    cy.intercept("POST", "/home/save").as("remove_card_request");
 
-    // ACT
+    // ACT : Add a card
     cy.get(".el-button").as("handle_dashboard");
     cy.get("@handle_dashboard").click({ force: true });
 
     cy.get(".el-checkbox").not(".is-checked").as("unchecked_options");
-
     cy.get("@unchecked_options").then((uncheckedOptions) => {
       if (uncheckedOptions.length !== 0) {
         cy.wrap(uncheckedOptions.find(`input[value="${cardValue}"]`)).as(
@@ -38,37 +38,29 @@ describe("Home", () => {
       }
     });
 
-    // ASSERT
-    cy.get("[data-bot=dashboard__card--is-customizable]").as("updated_cards");
-    cy.get("@updated_cards").should("contain", cardTitle);
-  });
+    // ASSERT : Add a card
+    cy.getByDataBot("dashboard__card--is-customizable").should(
+      "contain",
+      cardTitle
+    );
 
-  it("should be able to remove a card from dashboard dropdown", () => {
-    cy.get(".el-button").as("handle_dashboard");
-    cy.get("@handle_dashboard").click({ force: true });
-
+    // ACT : Remove a card
     cy.get(".el-checkbox.is-checked").as("checked_options");
+    cy.get("@checked_options").then((checkedOptions) => {
+      if (checkedOptions.length !== 0) {
+        cy.wrap(checkedOptions.find(`input[value="${cardValue}"]`)).as(
+          "agenda_checkbox"
+        );
+        cy.get("@agenda_checkbox").click({ force: true });
 
-    cy.get("@checked_options").then((uncheckedOptions) => {
-      // TODO : get first checked label (attention, il en faut plus d'une !)
-      // TODO : click on option
-      // TODO : assert the correct card has been added
-      // cy.log("unchecked options");
-      // cy.log(uncheckedOptions);
+        cy.wait("@remove_card_request");
+      }
     });
 
-    // cy.get("@checked_options").then((checkedOptions) => {
-    //   for (let index = 0; index < cb.length; index++) {
-    //     if (cb[index].contains("is-checked")) {
-    //       cy.log(cb[index]);
-    //     }
-    //   }
-    // });
-
-    // cy.get("@unchecked_options").first().click({ force: true });
-
-    // cy.get("@options_non_cochées").then(($checkboxes) => {
-    //   let text = $checkboxes.first().get(".el-checkbox__label");
-    // });
+    // ASSERT : Remove a card
+    cy.getByDataBot("dashboard__card--is-customizable").should(
+      "not.contain",
+      cardTitle
+    );
   });
 });
