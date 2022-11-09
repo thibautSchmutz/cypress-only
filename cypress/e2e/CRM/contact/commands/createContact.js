@@ -40,6 +40,16 @@ module.export = Cypress.Commands.add(
     //     cy.wrap(birthDateContainer).find('input').type(dateOfBirth)
     //   })
 
+    cy.log(dateOfBirth)
+
+      cy.getByDataBot("contact-overview__form--birthdate").as("contact_birthdate")
+      cy.get("@contact_birthdate").type(" ");
+
+      cy.get(".el-date-table").as("contact_datepicker_dropdown");
+      cy.get("@contact_datepicker_dropdown").then((datePickerDropdown) => {
+        cy.wrap(datePickerDropdown).find(".today").click({ force: true })
+      })
+
       cy.getByDataBot("contact-overview__form--email").as("contact_email")
       cy.get("@contact_email").type(email)
       

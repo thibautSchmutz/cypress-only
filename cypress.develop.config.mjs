@@ -8,6 +8,7 @@ export default defineConfig({
     LOGIN_URL: "https://login.slsy.io/login",
     USER_EMAIL: "admin@sellsy.com",
     USER_PASSWORD: "admin",
+    DATE_FORMAT: "MM/DD/YYYY"
   },
   e2e: {
     baseUrl: "https://app.slsy.io",
