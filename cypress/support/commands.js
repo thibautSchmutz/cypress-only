@@ -12,6 +12,7 @@ import "../e2e/CRM/client/commands/deleteAllClients.js";
 
 // CRM - contact
 import "../e2e/CRM/contact/commands/createContact.js";
+import "../e2e/CRM/contact/commands/deleteAllContacts.js";
 
 // DO NOT PRINT RESIZE ERRORS
 Cypress.on("uncaught:exception", (err) => {

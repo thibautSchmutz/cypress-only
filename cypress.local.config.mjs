@@ -7,13 +7,13 @@ export default defineConfig({
   viewportHeight: 1020,
   defaultCommandTimeout: 10000,
   env: {
-    LOGIN_URL: "https://develop.sip.test.slsy.io/login",
-    USER_EMAIL: process.env.DEVELOP_USER_EMAIL,
-    USER_PASSWORD: process.env.DEVELOP_USER_PASSWORD,
+    LOGIN_URL: "https://login.slsy.io/login",
+    USER_EMAIL: process.env.LOCAL_USER_EMAIL,
+    USER_PASSWORD: process.env.LOCAL_USER_PASSWORD,
     DATE_FORMAT: "MM/DD/YYYY",
   },
   e2e: {
-    baseUrl: "https://develop.app.test.slsy.io/",
+    baseUrl: "https://app.slsy.io",
     experimentalSessionAndOrigin: true,
     setupNodeEvents(on, config) {
       // implement node event listeners here

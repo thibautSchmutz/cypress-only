@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "local": "cypress open -C cypress.local.config.mjs",
     "dev": "cypress open -C cypress.develop.config.mjs",
     "staging": "cypress open -C cypress.staging.config.mjs",
     "prod": "cypress open -C cypress.production.config.mjs",
@@ -14,7 +15,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^10.9.0"
+    "cypress": "^10.9.0",
+    "dotenv": "^16.0.3"
   },
   "dependencies": {
     "@testing-library/cypress": "^8.0.3"
