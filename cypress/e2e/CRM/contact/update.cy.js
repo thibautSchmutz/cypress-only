@@ -43,8 +43,8 @@ describe("contact : update", () => {
     cy.get(".slsy-button").contains("Actions").as("actions_btn");
     cy.get("@actions_btn").click({ force: true });
 
-    cy.get("li").contains("Modifier le contact").as("update_btn");
-    cy.get("@update_btn").click({ force: true });
+    cy.get("li").contains("Modifier le contact").as("update_contact_btn");
+    cy.get("@update_contact_btn").click({ force: true });
 
     cy.wait("@update_contact_modal");
 
