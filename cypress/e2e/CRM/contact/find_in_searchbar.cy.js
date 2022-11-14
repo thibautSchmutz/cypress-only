@@ -1,18 +1,18 @@
-import createRandomClient from "./_data";
+import createRandomContact from "./_data";
 
-describe("client : search", () => {
-  let client;
+describe("contact : search", () => {
+  let contact;
 
   before(() => {
-    client = createRandomClient();
+    contact = createRandomContact();
     cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
-    cy.deleteAllClients();
-    cy.createClient(client);
+    cy.deleteAllContacts();
+    cy.createContact(contact);
   });
 
-  it("created client should be found in the global searchbar", () => {
+  it("created contact should be found in the global searchbar", () => {
     // ARRANGE
-    const searchTerms = `${client.firstname} ${client.lastName}`;
+    const searchTerms = `${contact.firstname} ${contact.lastName}`;
 
     cy.intercept("GET", `https://api.slsy.io/v2/search?q=*`).as(
       "search_results"
