@@ -7,7 +7,6 @@ describe("contact : create", () => {
     contact = createRandomContact();
     cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
     cy.deleteAllContacts();
-    // TODO : create command deleteAllContacts
   });
 
   it("should create a contact", () => {
