@@ -1,17 +1,22 @@
 import { SIREN } from "./SIREN.js";
-import { NIC } from "./NIC.js";
-
-// TODO : Faire RCS
 
 /**
- * => Generate a random SIRET code
+ * => Generate a random RCS code
+ *
+ * @params city {string} : 'BORDEAUX'
+ * @params type {"A" | "B"} : 'B'
  *
  * @example
  * ```js
- * const SIRET = Rd.SIRET()
+ * const RCS = Rd.RCS()
+ * ```
+ * @example
+ * ```js
+ * const RCS = Rd.RCS({ city: "LA ROCHELLE", type: "individual" })
  * ```
  *
  */
-const SIRET = () => `${SIREN()}${NIC()}`;
+const RCS = ({ city, type } = { city: "bordeaux", type: "B" }) =>
+  `RCS ${city.toUpperCase()} ${type} ${SIREN()}`;
 
-export { SIRET };
+export { RCS };

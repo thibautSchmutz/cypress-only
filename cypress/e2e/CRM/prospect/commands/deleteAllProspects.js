@@ -1,11 +1,11 @@
-module.export = Cypress.Commands.add("deleteAllClients", () => {
-  cy.log("ACTION : delete all clients");
+module.export = Cypress.Commands.add("deleteAllProspects", (destination) => {
+  cy.log("ACTION : delete all propsect");
 
-  cy.intercept("POST", "/listing/clients").as("get_listing_data");
+  cy.intercept("POST", "/listing/prospects").as("get_propspect_listings");
   cy.intercept("POST", "?_f=thirds").as("deletion_completed");
 
-  cy.visit(`/directory/clients`);
-  cy.wait("@get_listing_data");
+  cy.visit(`/directory/prospects`);
+  cy.wait("@get_propspect_listings");
 
   // If active filters, delete them
   cy.get(".leftpane").as("filter_panel");
@@ -28,7 +28,7 @@ module.export = Cypress.Commands.add("deleteAllClients", () => {
   cy.get(".listingContainer").as("listing_container");
   cy.get("@listing_container").then(($listing_container) => {
     if ($listing_container.find("a.subcell").length) {
-      cy.log(`clients found`);
+      cy.log(`prospect found`);
 
       cy.get(
         ".el-table__fixed > .el-table__fixed-header-wrapper > .el-table__header > thead > tr > .el-table_1_column_1 > .cell > label"
@@ -56,9 +56,9 @@ module.export = Cypress.Commands.add("deleteAllClients", () => {
 
       cy.wait("@deletion_completed");
 
-      cy.log(`clients deleted`);
+      cy.log(`prospects deleted`);
     } else {
-      cy.log(`No clients found`);
+      cy.log(`No prospects found`);
     }
   });
 });

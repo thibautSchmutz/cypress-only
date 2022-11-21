@@ -21,6 +21,7 @@ import { SIREN } from "./functions/company/SIREN.js";
 import { NIC } from "./functions/company/NIC.js";
 import { SIRET } from "./functions/company/SIRET.js";
 import { APE } from "./functions/company/APE.js";
+import { RCS } from "./functions/company/RCS.js";
 
 export default {
   firstName,
@@ -41,4 +42,5 @@ export default {
   NIC,
   SIRET,
   APE,
+  RCS,
 };
