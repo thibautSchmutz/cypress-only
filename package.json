@@ -9,14 +9,15 @@
     "dev": "cypress open -C cypress.develop.config.mjs",
     "staging": "cypress open -C cypress.staging.config.mjs",
     "prod": "cypress open -C cypress.production.config.mjs",
-    "test-data": "node --experimental-modules _data.js"
+    "test-data": "nodemon --experimental-modules _data.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "cypress": "^10.9.0",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.20"
   },
   "dependencies": {
     "@testing-library/cypress": "^8.0.3"

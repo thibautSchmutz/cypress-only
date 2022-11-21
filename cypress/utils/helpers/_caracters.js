@@ -1,4 +1,4 @@
-const lowercaseLetters = [
+export const lowercaseLetters = [
   "a",
   "b",
   "c",
@@ -27,7 +27,7 @@ const lowercaseLetters = [
   "z",
 ];
 
-const uppercaseLetters = [
+export const uppercaseLetters = [
   "A",
   "B",
   "C",
@@ -56,7 +56,7 @@ const uppercaseLetters = [
   "Z",
 ];
 
-const specialLetters = [
+export const specialLetters = [
   "!",
   "#",
   "$",

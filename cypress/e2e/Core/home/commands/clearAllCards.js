@@ -1,4 +1,6 @@
 module.exports = Cypress.Commands.add("clearAllCards", () => {
+  cy.log("ACTION: clear all cards");
+
   cy.get("[data-bot=dashboard__card--is-customizable]").as("cards");
 
   cy.visit("/");
@@ -17,5 +19,6 @@ module.exports = Cypress.Commands.add("clearAllCards", () => {
           .click({ force: true });
       }
     }
+    cy.log("Cards all cleared");
   });
 });

@@ -6,12 +6,7 @@ describe("client : create", () => {
   before(() => {
     client = createRandomClient();
     cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
-    cy.deleteAll({
-      route: "clients",
-      denomination: "clients",
-      deleteAction: "Supprimer la société et ses données",
-      apiRoute: "third",
-    });
+    cy.deleteAllClients();
   });
 
   it("should create a client", () => {
