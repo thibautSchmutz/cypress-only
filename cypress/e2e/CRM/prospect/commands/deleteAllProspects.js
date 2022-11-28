@@ -9,7 +9,7 @@ module.export = Cypress.Commands.add("deleteAllProspects", (destination) => {
 
   // If active filters, delete them
   cy.get(".leftpane").as("filter_panel");
-  cy.intercept("DELETE", `/listing/clients/filters`).as(
+  cy.intercept("DELETE", `/listing/prospects/filters`).as(
     "delete_listing_filters"
   );
   cy.get("@filter_panel").then(($panel) => {

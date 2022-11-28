@@ -1,10 +1,31 @@
-// import data from './_data';
-
 describe("Home", () => {
   beforeEach(() => {
     cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
     cy.visit("/home");
-    cy.clearAllCards();
+
+    // reset Cards
+    cy.log("ACTION: reset dashboard cards");
+
+    cy.get("[data-bot=dashboard__card--is-customizable]").as("cards");
+  
+    cy.visit("/");
+  
+    cy.get("button").contains("Gérer le tableau de bord").as("handle_dashboard_cards_btn");
+    cy.get("@handle_dashboard_cards_btn").click({ force: true });
+  
+    cy.get(".el-checkbox__input.is-checked").as("checked_options");
+  
+    cy.get("@checked_options").then((checkedOptions) => {
+      if (!!checkedOptions.length) {
+        // starts with index = 1 : to leave only first card active.
+        for (let index = 1; index < checkedOptions.length; index++) {
+          cy.wrap(checkedOptions[index])
+            .find(".el-checkbox__original")
+            .click({ force: true });
+        }
+      }
+      cy.log("Dashboard cards reseted");
+
   });
 
   it("should have at least one card", () => {

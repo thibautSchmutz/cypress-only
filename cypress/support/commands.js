@@ -6,9 +6,6 @@ import "@testing-library/cypress/add-commands";
 //   login
 import "../e2e/Core/login/commands/login.js";
 
-//   home
-import "../e2e/Core/home/commands/clearAllCards.js";
-
 /* ------------- */
 /* -----CRM----- */
 /* ------------- */
@@ -21,8 +18,13 @@ import "../e2e/CRM/contact/commands/createContact.js";
 import "../e2e/CRM/contact/commands/deleteAllContacts.js";
 
 //   prospect
-import "../e2e/CRM/prospect/commands/deleteAllProspects";
-import "../e2e/CRM/prospect/commands/createProspect";
+import "../e2e/CRM/prospect/commands/deleteAllProspects.js";
+import "../e2e/CRM/prospect/commands/createProspect.js";
+
+// corp
+
+// opportunity
+import "../e2e/CRM/opportunity/commands/deleteAllOpportunities.js";
 
 // DO NOT PRINT RESIZE ERRORS
 Cypress.on("uncaught:exception", (err) => {

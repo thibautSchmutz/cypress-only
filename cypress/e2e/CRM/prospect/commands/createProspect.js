@@ -8,11 +8,6 @@ module.exports = Cypress.Commands.add(
     corpPhone,
     corpMobile,
     corpEmail,
-    corpLegalStatus,
-    corpSIRET,
-    corpSIREN,
-    corpAPE,
-    corpCapitalStock,
 
     contactFirstName,
     contactLastName,
@@ -20,6 +15,22 @@ module.exports = Cypress.Commands.add(
     contactEmail,
     contactPhone,
     contactMobile,
+
+    corpLegalStatus,
+    corpSIRET,
+    corpSIREN,
+    corpAPE,
+    corpCapitalStock,
+    corpRCS,
+    corpTVAintra,
+
+    corpTwitter,
+    corpFacebook,
+    corpLinkedin,
+
+    corpNote,
+
+    submitTextBtn,
   }) => {
     cy.intercept("GET", "/home/init").as("saas_init");
     cy.intercept("POST", "/?_f=third").as("create_prospect_modal_renders");
@@ -91,6 +102,33 @@ module.exports = Cypress.Commands.add(
 
     cy.get("#corp_capital").as("corp_capital_input");
     cy.get("@corp_capital_input").type(corpCapitalStock);
+
+    cy.get("#corp_rcs").as("corp_rcs_input");
+    cy.get("@corp_rcs_input").type(corpRCS);
+
+    cy.get("#corp_vat").as("corp_tva_intra_input");
+    cy.get("@corp_tva_intra_input").type(corpTVAintra);
+
+    cy.get("#corp_twitter").as("corp_twitter_input");
+    cy.get("@corp_twitter_input").type(corpTwitter);
+
+    cy.get("#corp_facebook").as("corp_facebook_input");
+    cy.get("@corp_facebook_input").type(corpFacebook);
+
+    cy.get("#corp_linkedin").as("corp_linkedin_input");
+    cy.get("@corp_linkedin_input").type(corpLinkedin);
+
+    cy.get(".redactor_redactor").as("prospect_note_textarea");
+    cy.get("@prospect_note_textarea").type(corpNote);
+
+    cy.intercept("POST", "/?_f=third").as("create_prospect_post_request");
+
+    cy.get(".ui-dialog-buttonset > button")
+      .contains(new RegExp(`^${submitTextBtn}$`))
+      .as("submit_btn");
+    cy.get("@submit_btn").click({ force: true });
+
+    cy.wait("@create_prospect_post_request");
 
     cy.log("Prospect created");
   }

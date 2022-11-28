@@ -5,7 +5,7 @@ describe("individuals : update", () => {
     cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
   });
 
-  it("should create a company", () => {
+  it("should create a corp", () => {
     // ARRANGE
     cy.visit("/individuals/create");
   });

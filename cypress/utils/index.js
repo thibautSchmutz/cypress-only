@@ -22,6 +22,7 @@ import { NIC } from "./functions/company/NIC.js";
 import { SIRET } from "./functions/company/SIRET.js";
 import { APE } from "./functions/company/APE.js";
 import { RCS } from "./functions/company/RCS.js";
+import { TVAintra } from "./functions/company/TVAintra.js";
 
 export default {
   firstName,
@@ -43,4 +44,5 @@ export default {
   SIRET,
   APE,
   RCS,
+  TVAintra,
 };

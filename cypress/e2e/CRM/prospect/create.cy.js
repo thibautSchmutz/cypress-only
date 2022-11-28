@@ -11,18 +11,16 @@ describe("prospect : create", () => {
 
   it("should create a propsect", () => {
     // ARRANGE
-    cy.intercept("GET", "/rest/third/client/init/*").as("get_prospect_infos");
+    cy.intercept("GET", "/rest/third/prospect/init/*").as("get_prospect_infos");
 
     // ACT
-    cy.createProspect(prospect);
+    cy.createProspect({ ...prospect, submitTextBtn: "Enregistrer" });
 
-    // cy.wait("@get_prospect_infos");
+    cy.wait("@get_prospect_infos");
 
-    // // ASSERT
-    // cy.get(".mt-0 > .flex-level > .el-tooltip").as("overview_header");
-    // cy.get("@overview_header").should(
-    //   "contain",
-    //   `${prospect.firstname} ${prospect.lastName}`
-    // );
+    // ASSERT
+    cy.get(".mt-0 > .flex-level").as("overview_header");
+    cy.get("@overview_header").should("contain", prospect.corpName);
+    cy.get("@overview_header").should("contain", "Prospect");
   });
 });
