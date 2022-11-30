@@ -1,4 +1,3 @@
 node_modules/*
-_data.js
 .env
 .vscode/settings.json
