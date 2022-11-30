@@ -13,8 +13,25 @@ module.exports = Cypress.Commands.add("login", (email, password) => {
       cy.get("#password").as("password_input");
       cy.get("@password_input").clear().type(password);
 
-      cy.get("#submit").as("log_in_button");
-      cy.get("@log_in_button").click({ force: true });
+      cy.get("#submit").as("log_in_submit_button");
+      cy.get("@log_in_submit_button").click();
+
+      // TODO : Check if 2FA is active
+
+      cy.get("body").as("body_DOM_element");
+      cy.get("@body_DOM_element").then(($body) => {
+        if ($body.find("h2:contains('Two-factor authentication')").length) {
+          cy.task("generateOTP", Cypress.env("TWO_FA_VERIFICATION_CODE")).then(
+            (token) => {
+              cy.get("#_auth_code").as("2FA_code_input");
+              cy.get("@2FA_code_input").clear().type(token);
+
+              cy.get("button[type=submit]").as("2FA_submit_button");
+              cy.get("@2FA_submit_button").click();
+            }
+          );
+        }
+      });
 
       cy.wait("@login_request");
 
