@@ -5,6 +5,8 @@ import "@testing-library/cypress/add-commands";
 /* ------------ */
 //   login
 import "../e2e/Core/login/commands/login.js";
+//   logout
+import "../e2e/Core/logout/commands/logout.js";
 
 /* ------------- */
 /* -----CRM----- */
@@ -25,6 +27,9 @@ import "../e2e/CRM/prospect/commands/createProspect.js";
 
 // opportunity
 import "../e2e/CRM/opportunity/commands/deleteAllOpportunities.js";
+
+// onboarding
+import "../e2e/CRM/onboarding/commands/createAccount.js"
 
 // DO NOT PRINT RESIZE ERRORS
 Cypress.on("uncaught:exception", (err) => {
