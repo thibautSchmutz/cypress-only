@@ -7,6 +7,8 @@ export default defineConfig({
   viewportWidth: 1280,
   viewportHeight: 1020,
   defaultCommandTimeout: 10000,
+  video: false,
+  chromeWebSecurity: false,
   env: {
     LOGIN_URL: "https://login.slsy.io/login",
     USER_EMAIL: process.env.LOCAL_USER_EMAIL,

@@ -1,6 +1,12 @@
 import { randomize } from "../../helpers/_randomize.js";
 
-const extensions = ["sellsy.com", "gmail.com", "yahoo.fr", "apple.com"];
+const extensions = [
+  "gmail.com",
+  "yahoo.fr",
+  "apple.com",
+  "wanadoo.fr",
+  "club-internet.fr",
+];
 
 /**
  * => Generate a random email address
