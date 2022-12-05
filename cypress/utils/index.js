@@ -23,6 +23,8 @@ import { SIRET } from "./functions/company/SIRET.js";
 import { APE } from "./functions/company/APE.js";
 import { RCS } from "./functions/company/RCS.js";
 import { TVAintra } from "./functions/company/TVAintra.js";
+// PASSWORD
+import { password } from './functions/password/password.js'
 
 export default {
   firstName,
@@ -45,4 +47,5 @@ export default {
   APE,
   RCS,
   TVAintra,
+  password
 };
