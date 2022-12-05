@@ -19,6 +19,7 @@ const data = {
   word: Rd.word(),
   sentence: Rd.sentence(),
   paragraph: Rd.paragraph(),
+  password: Rd.password()
 };
 
 console.log(data);

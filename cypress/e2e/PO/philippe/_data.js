@@ -1,10 +1,23 @@
 import Rd from "../../../utils/index.js";
 
+const createRandomAccount = () => {
+  const username = Rd.word();
+
+  return {
+    companyName: Rd.word(),
+    firstName: Rd.firstName(),
+    lastName: Rd.lastName(),
+    email: Rd.email({ username }),
+    phone: Rd.phone({ country: "FR" }),
+    password: Rd.password(),
+  };
+};
+
 const generateProspect = () => {
   const corpName = Rd.word();
   const corpReference = Rd.word();
   const corpWebsite = `https://www.${corpName}.fr`;
-  const corpPriceCategory = Rd.priceCategory();
+  const corpPriceCategory = "Tarif HT";
   const corpPhone = Rd.phone({ country: "FR" });
   const corpMobile = Rd.phone({ country: "FR", type: "mobile" });
   const corpEmail = Rd.email({ username: corpName });
@@ -59,8 +72,9 @@ const generateProspect = () => {
   };
 };
 
-const createClementCustomData = () => ({
+const createPhilippeCustomData = () => ({
+  account: createRandomAccount(),
   prospect: generateProspect(),
 });
 
-export default createClementCustomData;
+export default createPhilippeCustomData;

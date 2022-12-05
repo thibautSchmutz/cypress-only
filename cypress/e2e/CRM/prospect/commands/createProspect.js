@@ -77,7 +77,7 @@ module.exports = Cypress.Commands.add(
     cy.get("@contact_lastname_input").type(contactLastName);
 
     cy.get("#thirdcontact_position").as("contact_job_input");
-    cy.get("@contact_job_input").type(contactJob);
+    cy.get("@contact_job_input").type(contactJob, { force: true });
 
     cy.get("#thirdcontact_email").as("contact_email_input");
     cy.get("@contact_email_input").type(contactEmail);
@@ -122,13 +122,12 @@ module.exports = Cypress.Commands.add(
     cy.get("@prospect_note_textarea").type(corpNote);
 
     cy.intercept("POST", "/?_f=third").as("create_prospect_post_request");
-
     cy.get(".ui-dialog-buttonset > button")
       .contains(new RegExp(`^${submitTextBtn}$`))
       .as("submit_btn");
     cy.get("@submit_btn").click({ force: true });
 
-    cy.wait("@create_prospect_post_request");
+    cy.wait("@create_prospect_post_request", { timeout: 200000 });
 
     cy.log("Prospect created");
   }
