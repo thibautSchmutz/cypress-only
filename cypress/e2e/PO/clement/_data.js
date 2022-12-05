@@ -1,6 +1,6 @@
 import Rd from "../../../utils/index.js";
 
-const generateProspectData = () => {
+export const generateProspectData = () => {
   const corpName = Rd.word();
   const corpReference = Rd.word();
   const corpWebsite = `https://www.${corpName}.fr`;
@@ -59,7 +59,7 @@ const generateProspectData = () => {
   };
 };
 
-const generateOpportunityData = () => {
+export const generateOpportunityData = () => {
   const name = Rd.word();
   const potentialAmount = 15000;
   const probability = 40;
@@ -72,10 +72,3 @@ const generateOpportunityData = () => {
     note,
   };
 };
-
-const createClementCustomData = () => ({
-  prospect: generateProspectData(),
-  opportunity: generateOpportunityData(),
-});
-
-export default createClementCustomData;

@@ -16,8 +16,6 @@ module.exports = Cypress.Commands.add("login", (email, password) => {
       cy.get("#submit").as("log_in_submit_button");
       cy.get("@log_in_submit_button").click();
 
-      // TODO : Check if 2FA is active
-
       cy.get("body").as("body_DOM_element");
       cy.get("@body_DOM_element").then(($body) => {
         if ($body.find("h2:contains('Two-factor authentication')").length) {
