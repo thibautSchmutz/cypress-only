@@ -33,6 +33,9 @@ import "../e2e/CRM/opportunity/commands/selectOpportunity.js";
 // onboarding
 import "../e2e/CRM/onboarding/commands/createAccount.js";
 
+// onboarding
+import "../e2e/CRM/onboarding/commands/createAccount.js"
+
 // DO NOT PRINT RESIZE ERRORS
 Cypress.on("uncaught:exception", (err) => {
   const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/;
