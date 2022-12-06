@@ -1,4 +1,8 @@
-import { generateProspectData, generateOpportunityData } from "./_data";
+import {
+  generateProspectData,
+  generateOpportunityData,
+  generateDocumentData,
+} from "./_data";
 
 describe("clement : custom check", () => {
   // SHARED DATA BETWEEN TESTS
@@ -7,6 +11,8 @@ describe("clement : custom check", () => {
 
   let opportunityID;
   let opportunityRandomData;
+
+  let documentRandomData;
 
   beforeEach(() => {
     cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
@@ -127,7 +133,7 @@ describe("clement : custom check", () => {
     cy.getByDataBot("prospect-overview__menu--opportunity").as(
       "prospect_opportunity_btn"
     );
-    cy.get("@prospect_opportunity_btn").click();
+    cy.get("@prospect_opportunity_btn").click({ force: true });
 
     cy.wait("@get_opportunities_listing", { timeout: 200000 });
 
@@ -157,7 +163,7 @@ describe("clement : custom check", () => {
     });
   });
 
-  it.only("opportunity steps should be editable", () => {
+  it("opportunity steps should be editable", () => {
     const opportunitySteps = [
       "Piste",
       "Prospection",
@@ -167,6 +173,7 @@ describe("clement : custom check", () => {
       "Devis signé",
       "Affaire conclue",
     ];
+    const selectedStepIndex = 2;
 
     // MANUALLY ARRANGE DATA IF NEEDED
     opportunityID = 40;
@@ -188,7 +195,7 @@ describe("clement : custom check", () => {
     cy.getByDataBot("opp-overview__menu--general-info").as(
       "opportunity_more_info_btn"
     );
-    cy.get("@opportunity_more_info_btn").click();
+    cy.get("@opportunity_more_info_btn").click({ force: true });
 
     cy.wait("@get_opportunity_overview_req");
 
@@ -201,20 +208,144 @@ describe("clement : custom check", () => {
       .as("opportunity_steps");
     cy.log("@opportunity_steps");
 
-    // TODO : Click on steps to see if name changes
-    // const steps = [''Piste', '...', etc]
-
-    // TODO : Click on Second one, should match second el in array + toast appears
-
     cy.intercept(
       "PUT",
       "/rest/prospection/opportunities/*/step?_output=overview"
     ).as("opportunity_update_step_req");
 
-    cy.get("@opportunity_steps").eq(2).click();
+    cy.get("@opportunity_steps").eq(selectedStepIndex).click({ force: true });
 
     cy.wait("@opportunity_update_step_req");
 
+    cy.get(".data-block .data-value").as("opportunity_overview_infos");
+    cy.get("@opportunity_overview_infos").should(
+      "contain",
+      opportunitySteps[selectedStepIndex]
+    );
+
+    cy.get("@opportunity_steps")
+      .eq(selectedStepIndex + 2)
+      .click({ force: true });
+
+    cy.wait("@opportunity_update_step_req");
+
+    cy.get(".data-block .data-value").as("opportunity_overview_infos");
+    cy.get("@opportunity_overview_infos").should(
+      "contain",
+      opportunitySteps[selectedStepIndex + 2]
+    );
+
     // #toast-container => .toast-message contains "L'étape de l'opportunité a été mises à jour"
+  });
+
+  it.only("should create a document", () => {
+    // MANUALLY ARRANGE DATA IF NEEDED
+    opportunityID = 40;
+    cy.log(`TEST DATA : opportunityID : ${opportunityID}`);
+
+    // BEFORE
+    documentRandomData = generateDocumentData();
+
+    // TEST START
+    cy.intercept("GET", "/rest/opportunity/init/*").as(
+      "get_opportunity_overview_req"
+    );
+
+    cy.visit(`/prospection/opportunities/${opportunityID}`);
+
+    cy.wait("@get_opportunity_overview_req", { timeout: 200000 });
+
+    /* OPEN CREATE DOCUMENT MODAL */
+    cy.intercept("GET", "/rest/prospection/opportunities/*/documents").as(
+      "get_opportunity_create_document_req"
+    );
+
+    cy.getByDataBot("opp-overview__menu--doc-linked").as(
+      "opportunity_create_document_btn"
+    );
+    cy.get("@opportunity_create_document_btn").click({ force: true });
+
+    cy.wait("@get_opportunity_create_document_req");
+
+    cy.intercept("POST", "/?_f=third").as("create_document_modal_appears_req");
+
+    cy.get("a").contains("Créer un document").as("create_document_btn");
+    cy.get("@create_document_btn").click({ force: true });
+
+    cy.wait("@create_document_modal_appears_req");
+
+    cy.intercept("POST", "/?_f=third&action=newDocRecord*").as(
+      "create_document_req"
+    );
+
+    cy.get("div[role=dialog] button")
+      .contains("Créer le document")
+      .as("modal_create_document_btn");
+    cy.get("@modal_create_document_btn").click({ force: true });
+
+    cy.wait("@create_document_req");
+
+    /* ADD A NEW RAW TO THE DOCUMENT AND INSERT AN AMOUT*/
+    cy.intercept("POST", "/?_f=doc").as("add_new_raw_req");
+
+    cy.get("a").contains("Nouvelle ligne").as("add_new_raw_btn");
+    cy.get("@add_new_raw_btn").click({ force: true });
+
+    cy.wait("@add_new_raw_req");
+
+    cy.get("#row_unitAmountDisplay_1").as("document_unit_amount_input");
+    cy.get("@document_unit_amount_input")
+      .clear()
+      .type(documentRandomData.unitAmount);
+
+    /* ADD PRODUCT FROM CATALOG */
+    cy.intercept("POST", "/?_f=catalogue").as("product_catalog_modal_renders");
+
+    cy.get("a")
+      .contains("Accéder au catalogue")
+      .as("access_product_catalog_btn");
+    cy.get("@access_product_catalog_btn").click({ force: true });
+
+    cy.wait("@product_catalog_modal_renders");
+
+    /* CHECK THAT NO PRODUCTS ARE IN THE PRODUCT'S CART */
+    cy.get("#cart").as("selected_product_left_panel");
+    cy.get("@selected_product_left_panel").should(
+      "contain",
+      "Ajouter des produits à la sélection"
+    );
+
+    cy.get("#docCatalogueFormContent tbody tr")
+      .eq(0)
+      .as("first_product_in_catalog");
+
+    cy.get("@first_product_in_catalog")
+      .find(".addItemtoCart")
+      .click({ force: true });
+
+    cy.get("@first_product_in_catalog")
+      .find(".row_item_name")
+      .invoke("text")
+      .then((productNameInnerText) => {
+        /* CHECK THAT SELECTED PRODUCT IS IN THE PRODUCT'S CART */
+        cy.get("@selected_product_left_panel").should(
+          "contain",
+          productNameInnerText
+        );
+
+        cy.intercept("POST", "/?_f=catalogue*").as(
+          "submit_add_product_to_document_req"
+        );
+
+        cy.get("button")
+          .contains("Valider")
+          .as("submit_add_product_to_document_btn");
+        cy.get("@submit_add_product_to_document_btn").click({ force: true });
+
+        cy.wait("@submit_add_product_to_document_req");
+
+        /* CHECK THAT SELECTED PRODUCT IS IN THE DOCUMENT */
+        cy.get(`input[value="${productNameInnerText}"]`).should("be.visible");
+      });
   });
 });

@@ -70,3 +70,11 @@ export const generateOpportunityData = () => {
     probability,
   };
 };
+
+export const generateDocumentData = () => {
+  const unitAmount = "120,00";
+
+  return {
+    unitAmount,
+  };
+};

@@ -34,7 +34,7 @@ import "../e2e/CRM/opportunity/commands/selectOpportunity.js";
 import "../e2e/CRM/onboarding/commands/createAccount.js";
 
 // onboarding
-import "../e2e/CRM/onboarding/commands/createAccount.js"
+import "../e2e/CRM/onboarding/commands/createAccount.js";
 
 // DO NOT PRINT RESIZE ERRORS
 Cypress.on("uncaught:exception", (err) => {
