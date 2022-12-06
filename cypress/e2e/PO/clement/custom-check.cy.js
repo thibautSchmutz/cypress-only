@@ -2,20 +2,22 @@ import { generateProspectData, generateOpportunityData } from "./_data";
 
 describe("clement : custom check", () => {
   // SHARED DATA BETWEEN TESTS
-  // you may set those data if you want to skip some tests
+  let prospectRandomData;
   let prospectID;
+
   let opportunityID;
+  let opportunityRandomData;
 
   beforeEach(() => {
     cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
   });
 
-  it("create a prospect", () => {
+  it("should create a prospect", () => {
     // BEFORE
-    const prospectRandomData = generateProspectData();
+    prospectRandomData = generateProspectData();
     cy.deleteAllProspects();
 
-    // CREATE PROSPECT
+    // TEST STARTS
     cy.log("Create prospect");
 
     cy.intercept("GET", "/rest/third/prospect/init/*").as(
@@ -40,11 +42,15 @@ describe("clement : custom check", () => {
     });
   });
 
-  it("create opportunity, linked to previously created prospect", () => {
+  it("should create an opportunity", () => {
+    // MANUALLY ARRANGE DATA IF NEEDED
+    // const prospectID =
+    cy.log(`TEST DATA : prospectID : ${prospectID}`);
     // BEFORE
-    const opportunityRandomData = generateOpportunityData();
+    opportunityRandomData = generateOpportunityData();
     cy.deleteAllOpportunities();
 
+    // TEST STARTS
     cy.log("Create opportunity");
 
     cy.log("Shared data needed for this test :");
@@ -57,9 +63,7 @@ describe("clement : custom check", () => {
       "get_opportunity_listing"
     );
 
-    cy.visit(
-      `https://app.slsy.io/thirds/prospect/${prospectID}?createOpportunity=`
-    );
+    cy.visit(`/thirds/prospect/${prospectID}?createOpportunity=`);
 
     cy.get(".popup-panel").as("create_opportunity_panel");
     cy.get("@create_opportunity_panel").should(
@@ -84,11 +88,6 @@ describe("clement : custom check", () => {
       .clear()
       .type(opportunityRandomData.probability);
 
-    // cy.get("[data-bot=opportunity-note-textarea] > [contenteditable=true]").as(
-    //   "opp_note_textarea"
-    // );
-    // cy.get("@opp_note_textarea").clear().type(opportunityRandomData.note);
-
     cy.get(".sidepanel-medium .slsy-button")
       .contains("Enregistrer")
       .as("opp_submit_btn");
@@ -105,31 +104,117 @@ describe("clement : custom check", () => {
 
     cy.get(".listing").as("opp_listing_table");
     cy.get("@opp_listing_table").should("contain", opportunityRandomData.name);
+  });
 
-    // ARRANGE FOR FOLLOWING TESTS
+  it("opportunity overview should be bound to previously created prospect", () => {
+    // MANUALLY ARRANGE DATA IF NEEDED
+    // prospectID = 298;
+    // opportunityRandomData = {
+    //   name: "vehicula",
+    // };
+    cy.log(`TEST DATA : prospectID : ${prospectID}`);
+    cy.log(
+      `TEST DATA : opportunityRandomData.name : ${opportunityRandomData.name}`
+    );
+
+    // TEST START
+    cy.intercept("POST", "/listing/lightened-opportunities").as(
+      "get_opportunities_listing"
+    );
+
+    cy.visit(`/thirds/prospect/${prospectID}`);
+
+    cy.getByDataBot("prospect-overview__menu--opportunity").as(
+      "prospect_opportunity_btn"
+    );
+    cy.get("@prospect_opportunity_btn").click();
+
+    cy.wait("@get_opportunities_listing", { timeout: 200000 });
+
+    cy.intercept("GET", "/rest/opportunity/init/*").as(
+      "get_opportunity_overview_req"
+    );
+
+    cy.get(".listing").as("oppotunity_listing_container");
+    cy.wrap("@oppotunity_listing_container")
+      .get(".el-table__row")
+      .contains(opportunityRandomData.name)
+      .click({ force: true });
+
+    cy.wait("@get_opportunity_overview_req", { timeout: 200000 });
+
+    cy.get("[mappingname='Opportunity'] header").as(
+      "opportunity_overview_header"
+    );
+    cy.get("@opportunity_overview_header").should(
+      "contain",
+      opportunityRandomData.name
+    );
+
     cy.url().then(($url) => {
-      prospectID = $url.split("prospect/")[1].split("?createOpportunity")[0];
-      cy.log(`set PropsectID for following test :${prospectID}`);
-    });
-
-    cy.url().then(($url) => {
-      cy.log(`${$url}`);
-
-      cy.wait(4000000);
-
-      // opportunityID = $url.split("opportunities/")[1].split("?contextId")[0];
-      // cy.log(`set PropsectID for following test :${opportunityID}`);
+      opportunityID = $url.split("opportunities/")[1].split("?contextId")[0];
+      cy.log(`set opportunityID for following test :${opportunityID}`);
     });
   });
 
-  it("Does something else", () => {
-    cy.log("Does something else");
+  it.only("opportunity steps should be editable", () => {
+    const opportunitySteps = [
+      "Piste",
+      "Prospection",
+      "Contact téléphonique",
+      "Envoi de devis",
+      "Négociation",
+      "Devis signé",
+      "Affaire conclue",
+    ];
 
-    cy.log("Shared data needed for this test :");
-    cy.log(`opportunityID : ${opportunityID}`);
+    // MANUALLY ARRANGE DATA IF NEEDED
+    opportunityID = 40;
+    cy.log(`TEST DATA : opportunityID : ${opportunityID}`);
 
-    cy.visit(`https://app.slsy.io/prospection/opportunities/${opportunityID}`);
+    // TEST START
+    cy.intercept("GET", "/rest/opportunity/init/*").as(
+      "get_opportunity_overview_req"
+    );
 
-    cy.wait(2000000);
+    cy.visit(`/prospection/opportunities/${opportunityID}`);
+
+    cy.wait("@get_opportunity_overview_req", { timeout: 200000 });
+
+    cy.intercept("GET", "/rest/opportunity/init/*").as(
+      "get_opportunity_overview_req"
+    );
+
+    cy.getByDataBot("opp-overview__menu--general-info").as(
+      "opportunity_more_info_btn"
+    );
+    cy.get("@opportunity_more_info_btn").click();
+
+    cy.wait("@get_opportunity_overview_req");
+
+    cy.get("[mappingname='Opportunity'] header").as(
+      "opportunity_overview_header"
+    );
+
+    cy.wrap("@opportunity_overview_header")
+      .get(".el-step")
+      .as("opportunity_steps");
+    cy.log("@opportunity_steps");
+
+    // TODO : Click on steps to see if name changes
+    // const steps = [''Piste', '...', etc]
+
+    // TODO : Click on Second one, should match second el in array + toast appears
+
+    cy.intercept(
+      "PUT",
+      "/rest/prospection/opportunities/*/step?_output=overview"
+    ).as("opportunity_update_step_req");
+
+    cy.get("@opportunity_steps").eq(2).click();
+
+    cy.wait("@opportunity_update_step_req");
+
+    // #toast-container => .toast-message contains "L'étape de l'opportunité a été mises à jour"
   });
 });
