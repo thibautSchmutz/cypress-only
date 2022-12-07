@@ -9,6 +9,7 @@
     "dev": "cypress open -C cypress.develop.config.mjs",
     "staging": "cypress open -C cypress.staging.config.mjs",
     "prod": "cypress open -C cypress.production.config.mjs",
+    "mock-ci": "cypress run -C cypress.local.config.mjs",
     "test-data": "nodemon --experimental-modules _test-data.js"
   },
   "keywords": [],

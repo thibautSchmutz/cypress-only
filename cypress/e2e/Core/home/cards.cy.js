@@ -7,14 +7,16 @@ describe("Home", () => {
     cy.log("ACTION: reset dashboard cards");
 
     cy.get("[data-bot=dashboard__card--is-customizable]").as("cards");
-  
+
     cy.visit("/");
-  
-    cy.get("button").contains("Gérer le tableau de bord").as("handle_dashboard_cards_btn");
+
+    cy.get("button")
+      .contains("Gérer le tableau de bord")
+      .as("handle_dashboard_cards_btn");
     cy.get("@handle_dashboard_cards_btn").click({ force: true });
-  
+
     cy.get(".el-checkbox__input.is-checked").as("checked_options");
-  
+
     cy.get("@checked_options").then((checkedOptions) => {
       if (!!checkedOptions.length) {
         // starts with index = 1 : to leave only first card active.
@@ -24,8 +26,8 @@ describe("Home", () => {
             .click({ force: true });
         }
       }
-      cy.log("Dashboard cards reseted");
-
+    });
+    cy.log("Dashboard cards reseted");
   });
 
   it("should have at least one card", () => {
@@ -44,8 +46,8 @@ describe("Home", () => {
     cy.intercept("POST", "/home/save").as("remove_card_request");
 
     // ACT : Add a card
-    cy.get(".el-button").as("handle_dashboard");
-    cy.get("@handle_dashboard").click({ force: true });
+    cy.getByDataBot("dashboard-manage").as("dashboard-manage_btn");
+    cy.get("@dashboard-manage_btn").click({ force: true });
 
     cy.get(".el-checkbox").not(".is-checked").as("unchecked_options");
     cy.get("@unchecked_options").then((uncheckedOptions) => {

@@ -55,9 +55,6 @@ describe("client : update", () => {
     cy.get("#third_email").as("email_input");
     cy.get("@email_input").clear().type(newClient.email);
 
-    cy.get(".redactor_redactor").as("note_textarea");
-    cy.get("@note_textarea").clear().type(newClient.note);
-
     cy.get(".ui-dialog-buttonset > .btn-primary").as("submit_btn");
     cy.get("@submit_btn").click({ force: true });
 
@@ -78,7 +75,6 @@ describe("client : update", () => {
     cy.get("@overview_content").should("contain", client.social.linkedin);
     cy.get("@overview_content").should("contain", client.social.viadeo);
     // Updated values
-    cy.get("@overview_content").should("contain", newClient.note);
     cy.get("@overview_content").should("contain", newClient.mobile);
     cy.get("@overview_content").should("contain", newClient.email);
   });

@@ -176,7 +176,7 @@ describe("clement : custom check", () => {
     const selectedStepIndex = 2;
 
     // MANUALLY ARRANGE DATA IF NEEDED
-    opportunityID = 40;
+    // opportunityID = 40;
     cy.log(`TEST DATA : opportunityID : ${opportunityID}`);
 
     // TEST START
@@ -238,9 +238,9 @@ describe("clement : custom check", () => {
     // #toast-container => .toast-message contains "L'étape de l'opportunité a été mises à jour"
   });
 
-  it.only("should create a document", () => {
+  it("should create a document", () => {
     // MANUALLY ARRANGE DATA IF NEEDED
-    opportunityID = 40;
+    // opportunityID = 40;
     cy.log(`TEST DATA : opportunityID : ${opportunityID}`);
 
     // BEFORE

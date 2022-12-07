@@ -6,7 +6,7 @@ const countries = {
     numbersToGenerate: 8,
     addSpacingEach: 2,
     startsWith: {
-      default: ["1", "2", "3", "4", "5", "8", "9"],
+      default: ["1", "2", "3", "4", "5", "9"],
       mobile: ["6", "7"],
     },
   },
