@@ -63,11 +63,13 @@ export const generateOpportunityData = () => {
   const name = Rd.word();
   const potentialAmount = 15000;
   const probability = 40;
+  const note = Rd.sentence({ length: 10 });
 
   return {
     name,
     potentialAmount,
     probability,
+    note,
   };
 };
 

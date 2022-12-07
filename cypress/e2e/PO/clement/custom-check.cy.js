@@ -14,6 +14,8 @@ describe("clement : custom check", () => {
 
   let documentRandomData;
 
+  let devisID;
+
   beforeEach(() => {
     cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
   });
@@ -93,6 +95,12 @@ describe("clement : custom check", () => {
     cy.get("@opp_probability_input")
       .clear()
       .type(opportunityRandomData.probability);
+
+    // TODO : Uncomment when Vincent HF passes !
+    // cy.get("[data-bot=opportunity-note-textarea] > [contenteditable=true]").as(
+    //   "opp_note_textarea"
+    // );
+    // cy.get("@opp_note_textarea").clear().type(opportunityRandomData.note);
 
     cy.get(".sidepanel-medium .slsy-button")
       .contains("Enregistrer")
@@ -240,7 +248,7 @@ describe("clement : custom check", () => {
 
   it("should create a document", () => {
     // MANUALLY ARRANGE DATA IF NEEDED
-    // opportunityID = 40;
+    // opportunityID = 64;
     cy.log(`TEST DATA : opportunityID : ${opportunityID}`);
 
     // BEFORE
@@ -346,6 +354,64 @@ describe("clement : custom check", () => {
 
         /* CHECK THAT SELECTED PRODUCT IS IN THE DOCUMENT */
         cy.get(`input[value="${productNameInnerText}"]`).should("be.visible");
+
+        /* CHECK ADD SIGNATURES IN PDF OPTION */
+        cy.get("#showSignAndStamp").as("add_signature_to_pdf_checkbox");
+        cy.get("@add_signature_to_pdf_checkbox").check();
+
+        /* UPDATE DOCUMENT PREFERENCES */
+        cy.get("#docSettingsPanelBtn").as("update_document_preferences_btn");
+        cy.get("@update_document_preferences_btn").click({ force: true });
+
+        cy.get("#content_paymediums label")
+          .contains("virement bancaire")
+          .click({ force: true });
+        cy.get("#content_paymediums label")
+          .contains("carte bancaire")
+          .click({ force: true });
+
+        /* SUBMIT DOCUMENT */
+        cy.intercept("GET", "/rest/documents/estimate/*/kpi").as(
+          "devis_page_loaded"
+        );
+
+        cy.getByDataBot("docform-sale--save-and-exit").click({ force: true });
+
+        cy.wait("@devis_page_loaded", { timeout: 200000 });
+
+        /* CONVERT TO BILL */
+        cy.get("a")
+          .contains(/^Facture$/)
+          .as("convert_to_bill_btn");
+        cy.get("@convert_to_bill_btn").click({ force: true });
+
+        cy.intercept("POST", "/?_f=third").as("convert_to_bill_submit_req");
+
+        cy.get("button")
+          .contains(/^Convertir$/)
+          .as("modal_confirm_convert_to_bill_btn");
+        cy.get("@modal_confirm_convert_to_bill_btn").click({ force: true });
+
+        cy.wait("@convert_to_bill_submit_req", { timeout: 200000 });
+
+        /* TRANSFORM PROSPECT */
+
+        cy.intercept("POST", "/?_f=doc").as("transform_prospect_req");
+
+        cy.get("button")
+          .contains(/^Enregistrer$/)
+          .as("modal_confirm_transform_prospect_btn");
+        cy.get("@modal_confirm_transform_prospect_btn").click({ force: true });
+
+        cy.wait("@transform_prospect_req", { timeout: 200000 });
+
+        // cy.url().then(($url) => {
+        //   // devisID
+        //   opportunityID = $url.split("opportunities/")[1].split("?contextId")[0];
+        //   cy.log(`set opportunityID for following test :${opportunityID}`);
+        // });
+        // TODO : Delete all documents
+        // .overview-leftpane-container
       });
   });
 });
