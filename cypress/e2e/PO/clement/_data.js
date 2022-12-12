@@ -80,3 +80,17 @@ export const generateDocumentData = () => {
     unitAmount,
   };
 };
+
+export const generateSupplierData = () => {
+  const corpName = Rd.word();
+
+  const contactFirstName = Rd.firstName();
+  const contactLastName = Rd.lastName();
+
+  return {
+    corpName,
+
+    contactFirstName,
+    contactLastName,
+  };
+};

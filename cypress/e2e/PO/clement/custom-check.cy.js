@@ -2,6 +2,7 @@ import {
   generateProspectData,
   generateOpportunityData,
   generateDocumentData,
+  generateSupplierData,
 } from "./_data";
 
 describe("clement : custom check", () => {
@@ -14,7 +15,9 @@ describe("clement : custom check", () => {
 
   let documentRandomData;
 
-  let devisID;
+  let invoiceID;
+
+  let supplierRandomData;
 
   beforeEach(() => {
     cy.login(Cypress.env("USER_EMAIL"), Cypress.env("USER_PASSWORD"));
@@ -248,7 +251,7 @@ describe("clement : custom check", () => {
 
   it("should create a document", () => {
     // MANUALLY ARRANGE DATA IF NEEDED
-    // opportunityID = 64;
+    // opportunityID = 87;
     cy.log(`TEST DATA : opportunityID : ${opportunityID}`);
 
     // BEFORE
@@ -375,7 +378,26 @@ describe("clement : custom check", () => {
           "devis_page_loaded"
         );
 
+        cy.get("body").as("body_DOM_element");
+
+        cy.intercept("POST", "/?_f=doc&action=record").as("doc_form_save_req");
+
         cy.getByDataBot("docform-sale--save-and-exit").click({ force: true });
+
+        cy.wait("@doc_form_save_req", { timeout: 200000 });
+
+        /* IF DOCUMENT HAS MULTIPLE OPPORTUNITY, A MODAL APPEARS TO UPDATE PREVIOUS OPPORTUNITPY */
+        cy.get("@body_DOM_element").then(($body) => {
+          if (
+            $body.find(
+              ".ui-dialog-title:contains('Mise à jour des opportunités liées')"
+            ).length
+          ) {
+            cy.get("button").contains("Mettre à jour").click();
+            // cy.get("button").contains("Ne rien faire").click();
+            // cy.get("@email_input").clear().type(email);
+          }
+        });
 
         cy.wait("@devis_page_loaded", { timeout: 200000 });
 
@@ -405,13 +427,129 @@ describe("clement : custom check", () => {
 
         cy.wait("@transform_prospect_req", { timeout: 200000 });
 
-        // cy.url().then(($url) => {
-        //   // devisID
-        //   opportunityID = $url.split("opportunities/")[1].split("?contextId")[0];
-        //   cy.log(`set opportunityID for following test :${opportunityID}`);
-        // });
-        // TODO : Delete all documents
-        // .overview-leftpane-container
+        cy.intercept("GET", "/rest/documents/invoice/*/kpi").as(
+          "save_document_req"
+        );
+
+        cy.get("a")
+          .contains("Enregistrer et quitter")
+          .as("document_save_and_quit_btn");
+        cy.get("@document_save_and_quit_btn").click({ force: true });
+
+        cy.wait("@save_document_req", { timeout: 200000 });
+
+        cy.url().then(($url) => {
+          invoiceID = $url.split("?_f=invoiceOverview&id=")[1];
+          cy.log(`set invoiceID for following test :${invoiceID}`);
+        });
       });
+  });
+
+  it("should convert document into an invoice", () => {
+    // MANUALLY ARRANGE DATA IF NEEDED
+    // invoiceID = 52;
+    cy.log(`TEST DATA : invoiceID : ${invoiceID}`);
+
+    // TEST START
+    cy.intercept("GET", `/rest/documents/invoice/${invoiceID}/kpi`).as(
+      "invoice_page"
+    );
+
+    cy.visit(`?_f=invoiceOverview&id=${invoiceID}`);
+
+    cy.wait("@invoice_page", { timeout: 200000 });
+
+    cy.get("button")
+      .contains("Finaliser en facture")
+      .as("finalize_invoice_btn");
+    cy.get("@finalize_invoice_btn").click({ force: true });
+
+    cy.get("button").contains("Finaliser").as("confirm_modal_invoice_btn");
+    cy.get("@confirm_modal_invoice_btn").click({ force: true });
+
+    cy.wait("@invoice_page", { timeout: 200000 });
+
+    cy.intercept("POST", "/?_f=doc").as("register_a_payment_modal_appears");
+
+    cy.get("a")
+      .contains("Enregistrer un paiement")
+      .as("register_a_payment_btn");
+    cy.get("@register_a_payment_btn").click({ force: true });
+
+    cy.wait("@register_a_payment_modal_appears");
+
+    cy.get(".ui-dialog button")
+      .contains("Enregistrer")
+      .as("confirm_modal_payment_btn");
+    cy.get("@confirm_modal_payment_btn").click({ force: true });
+
+    cy.wait("@invoice_page", { timeout: 200000 });
+
+    //TODO : Assert status "payée"
+
+    cy.intercept("POST", "/?_f=purchases_link").as("link_a_buy_req");
+
+    cy.get("a").contains("Lier un achat").as("link_a_buy_btn");
+    cy.get("@link_a_buy_btn").click({ force: true });
+
+    cy.wait("@link_a_buy_req");
+
+    cy.get(".ui-dialog a").contains("Facture").as("bill_btn");
+    cy.get("@bill_btn").click();
+  });
+
+  it.only("should create an invoice for a new supplier", () => {
+    // MANUALLY ARRANGE DATA IF NEEDED
+    invoiceID = 56;
+    cy.log(`TEST DATA : invoiceID : ${invoiceID}`);
+
+    // BEFORE
+    supplierRandomData = generateSupplierData();
+
+    // TEST START
+    cy.visit(`?_f=purchases_purInvoices&linkTo=invoice&linkId=${invoiceID}`);
+
+    cy.intercept("POST", "/?_f=purchases_purchases").as("create_document_req");
+
+    cy.get("a").contains("Créer un document").as("create_document_btn");
+    cy.get("@create_document_btn").click();
+
+    cy.wait("@create_document_req");
+
+    cy.intercept(
+      "GET",
+      "/?_f=third&action=formForRelated&relationType=supplier&linkedType=document"
+    ).as("create_new_supplier_bill_form_appears");
+
+    cy.get("input#docnewthird").as("create_new_supplier_bill_option");
+    cy.get("@create_new_supplier_bill_option").click();
+
+    cy.wait("@create_new_supplier_bill_form_appears");
+
+    cy.get("#corp_name").as("supplier_corpname_input");
+    cy.get("@supplier_corpname_input")
+      .clear()
+      .type(supplierRandomData.corpName);
+
+    cy.get("#thirdcontact_forename").as("supplier_firstname_input");
+    cy.get("@supplier_firstname_input")
+      .clear()
+      .type(supplierRandomData.contactFirstName);
+
+    cy.get("#thirdcontact_name").as("supplier_name_input");
+    cy.get("@supplier_name_input")
+      .clear()
+      .type(supplierRandomData.contactLastName);
+
+    cy.intercept("POST", "/?_f=purchases_purchases").as(
+      "post_supplier_invoice_req"
+    );
+
+    cy.get("button")
+      .contains("Créer le document")
+      .as("create_supplier_invoice_btn");
+    cy.get("@create_supplier_invoice_btn").click({ force: true });
+
+    cy.wait("@post_supplier_invoice_req", { timeout: 200000 });
   });
 });

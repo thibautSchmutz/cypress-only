@@ -4,7 +4,7 @@ module.export = Cypress.Commands.add("deleteAllOpportunities", () => {
   cy.intercept("POST", "/listing/opportunities").as(
     "get_opportunity_listing_data"
   );
-  cy.intercept("POST", "?_f=thirds").as("deletion_completed");
+  cy.intercept("POST", "/?_f=prospection_opportunity").as("deletion_completed");
 
   cy.visit(`/opportunities`);
   cy.wait("@get_opportunity_listing_data");
@@ -37,12 +37,17 @@ module.export = Cypress.Commands.add("deleteAllOpportunities", () => {
       ).as("select_all_checkbox");
       cy.get("@select_all_checkbox").click({ force: true });
 
-      cy.findAllByPlaceholderText("— Choisissez une action à effectuer —").as(
+      cy.get('input[placeholder="— Choisissez une action à effectuer —"]').as(
         "action_select"
       );
+      // cy.findAllByPlaceholderText("— Choisissez une action à effectuer —").as(
+      //   "action_select"
+      // );
       cy.get("@action_select").click({ force: true });
 
-      cy.findByText("Supprimer").as("delete_all_option");
+      cy.get(".el-select-dropdown__item")
+        .contains("Supprimer")
+        .as("delete_all_option");
       cy.get("@delete_all_option").click({ force: true });
 
       cy.get("button").contains("Valider").as("validate_action_btn");
