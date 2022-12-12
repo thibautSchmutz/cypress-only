@@ -208,7 +208,7 @@ describe("clement : custom check", () => {
     );
     cy.get("@opportunity_more_info_btn").click({ force: true });
 
-    cy.wait("@get_opportunity_overview_req");
+    cy.wait("@get_opportunity_overview_req", { timeout: 200000 });
 
     cy.get("[mappingname='Opportunity'] header").as(
       "opportunity_overview_header"
@@ -226,7 +226,7 @@ describe("clement : custom check", () => {
 
     cy.get("@opportunity_steps").eq(selectedStepIndex).click({ force: true });
 
-    cy.wait("@opportunity_update_step_req");
+    cy.wait("@opportunity_update_step_req", { timeout: 200000 });
 
     cy.get(".data-block .data-value").as("opportunity_overview_infos");
     cy.get("@opportunity_overview_infos").should(
@@ -238,7 +238,7 @@ describe("clement : custom check", () => {
       .eq(selectedStepIndex + 2)
       .click({ force: true });
 
-    cy.wait("@opportunity_update_step_req");
+    cy.wait("@opportunity_update_step_req", { timeout: 200000 });
 
     cy.get(".data-block .data-value").as("opportunity_overview_infos");
     cy.get("@opportunity_overview_infos").should(
@@ -276,14 +276,14 @@ describe("clement : custom check", () => {
     );
     cy.get("@opportunity_create_document_btn").click({ force: true });
 
-    cy.wait("@get_opportunity_create_document_req");
+    cy.wait("@get_opportunity_create_document_req", { timeout: 200000 });
 
     cy.intercept("POST", "/?_f=third").as("create_document_modal_appears_req");
 
     cy.get("a").contains("Créer un document").as("create_document_btn");
     cy.get("@create_document_btn").click({ force: true });
 
-    cy.wait("@create_document_modal_appears_req");
+    cy.wait("@create_document_modal_appears_req", { timeout: 200000 });
 
     cy.intercept("POST", "/?_f=third&action=newDocRecord*").as(
       "create_document_req"
@@ -294,7 +294,7 @@ describe("clement : custom check", () => {
       .as("modal_create_document_btn");
     cy.get("@modal_create_document_btn").click({ force: true });
 
-    cy.wait("@create_document_req");
+    cy.wait("@create_document_req", { timeout: 200000 });
 
     /* ADD A NEW RAW TO THE DOCUMENT AND INSERT AN AMOUT*/
     cy.intercept("POST", "/?_f=doc").as("add_new_raw_req");
@@ -302,7 +302,7 @@ describe("clement : custom check", () => {
     cy.get("a").contains("Nouvelle ligne").as("add_new_raw_btn");
     cy.get("@add_new_raw_btn").click({ force: true });
 
-    cy.wait("@add_new_raw_req");
+    cy.wait("@add_new_raw_req", { timeout: 200000 });
 
     cy.get("#row_unitAmountDisplay_1").as("document_unit_amount_input");
     cy.get("@document_unit_amount_input")
@@ -317,7 +317,7 @@ describe("clement : custom check", () => {
       .as("access_product_catalog_btn");
     cy.get("@access_product_catalog_btn").click({ force: true });
 
-    cy.wait("@product_catalog_modal_renders");
+    cy.wait("@product_catalog_modal_renders", { timeout: 200000 });
 
     /* CHECK THAT NO PRODUCTS ARE IN THE PRODUCT'S CART */
     cy.get("#cart").as("selected_product_left_panel");
@@ -353,7 +353,7 @@ describe("clement : custom check", () => {
           .as("submit_add_product_to_document_btn");
         cy.get("@submit_add_product_to_document_btn").click({ force: true });
 
-        cy.wait("@submit_add_product_to_document_req");
+        cy.wait("@submit_add_product_to_document_req", { timeout: 200000 });
 
         /* CHECK THAT SELECTED PRODUCT IS IN THE DOCUMENT */
         cy.get(`input[value="${productNameInnerText}"]`).should("be.visible");
@@ -476,7 +476,7 @@ describe("clement : custom check", () => {
       .as("register_a_payment_btn");
     cy.get("@register_a_payment_btn").click({ force: true });
 
-    cy.wait("@register_a_payment_modal_appears");
+    cy.wait("@register_a_payment_modal_appears", { timeout: 200000 });
 
     cy.get(".ui-dialog button")
       .contains("Enregistrer")
@@ -492,15 +492,15 @@ describe("clement : custom check", () => {
     cy.get("a").contains("Lier un achat").as("link_a_buy_btn");
     cy.get("@link_a_buy_btn").click({ force: true });
 
-    cy.wait("@link_a_buy_req");
+    cy.wait("@link_a_buy_req", { timeout: 200000 });
 
     cy.get(".ui-dialog a").contains("Facture").as("bill_btn");
     cy.get("@bill_btn").click();
   });
 
-  it.only("should create an invoice for a new supplier", () => {
+  it("should create an invoice for a new supplier", () => {
     // MANUALLY ARRANGE DATA IF NEEDED
-    invoiceID = 56;
+    // invoiceID = 56;
     cy.log(`TEST DATA : invoiceID : ${invoiceID}`);
 
     // BEFORE
@@ -514,7 +514,7 @@ describe("clement : custom check", () => {
     cy.get("a").contains("Créer un document").as("create_document_btn");
     cy.get("@create_document_btn").click();
 
-    cy.wait("@create_document_req");
+    cy.wait("@create_document_req", { timeout: 200000 });
 
     cy.intercept(
       "GET",
@@ -524,7 +524,7 @@ describe("clement : custom check", () => {
     cy.get("input#docnewthird").as("create_new_supplier_bill_option");
     cy.get("@create_new_supplier_bill_option").click();
 
-    cy.wait("@create_new_supplier_bill_form_appears");
+    cy.wait("@create_new_supplier_bill_form_appears", { timeout: 200000 });
 
     cy.get("#corp_name").as("supplier_corpname_input");
     cy.get("@supplier_corpname_input")

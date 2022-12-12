@@ -16,7 +16,7 @@ describe("prospect : create", () => {
     // ACT
     cy.createProspect({ ...prospect, submitTextBtn: "Enregistrer" });
 
-    cy.wait("@get_prospect_infos");
+    cy.wait("@get_prospect_infos", { timeout: 200000 });
 
     // ASSERT
     cy.get(".mt-0 > .flex-level").as("overview_header");

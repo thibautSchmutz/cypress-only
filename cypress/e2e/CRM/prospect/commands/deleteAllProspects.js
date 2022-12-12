@@ -5,7 +5,7 @@ module.export = Cypress.Commands.add("deleteAllProspects", (destination) => {
   cy.intercept("POST", "?_f=thirds").as("deletion_completed");
 
   cy.visit(`/directory/prospects`);
-  cy.wait("@get_propspect_listings");
+  cy.wait("@get_propspect_listings", { timeout: 200000 });
 
   // If active filters, delete them
   cy.get(".leftpane").as("filter_panel");
@@ -17,7 +17,7 @@ module.export = Cypress.Commands.add("deleteAllProspects", (destination) => {
       cy.log("Some filters are active");
       cy.get("a.pull-right.semibold").as("filters_reset_btn");
       cy.get("@filters_reset_btn").click({ force: true });
-      cy.wait("@delete_listing_filters");
+      cy.wait("@delete_listing_filters", { timeout: 200000 });
       cy.log("Filters cleared");
     } else {
       cy.log("No active filters");
@@ -54,7 +54,7 @@ module.export = Cypress.Commands.add("deleteAllProspects", (destination) => {
       cy.get("button").contains("Supprimer les données").as("delete_data_btn");
       cy.get("@delete_data_btn").click({ force: true });
 
-      cy.wait("@deletion_completed");
+      cy.wait("@deletion_completed", { timeout: 200000 });
 
       cy.log(`prospects deleted`);
     } else {

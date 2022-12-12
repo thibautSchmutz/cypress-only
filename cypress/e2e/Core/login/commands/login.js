@@ -43,9 +43,7 @@ module.exports = Cypress.Commands.add("login", (email, password) => {
         }
       });
 
-      // TODO : Check for relogging.
-
-      cy.wait("@login_request");
+      cy.wait("@login_request", { timeout: 200000 });
 
       cy.log("Logged IN");
     },

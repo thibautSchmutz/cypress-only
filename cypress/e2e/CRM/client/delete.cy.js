@@ -26,14 +26,14 @@ describe("client : delete", () => {
     ).as("global_search_input");
     cy.get("@global_search_input").type(searchTerms);
 
-    cy.wait("@search_results");
+    cy.wait("@search_results", { timeout: 200000 });
 
     cy.get(".mt-3 > .my-1 > .hover-primary-05-bkg > .pointer > .flex-level").as(
       "client_result_link"
     );
     cy.get("@client_result_link").click({ force: true });
 
-    cy.wait("@overview_loaded");
+    cy.wait("@overview_loaded", { timeout: 200000 });
 
     cy.findByText("Actions").as("overview_action_btn");
     cy.get("@overview_action_btn").click({ force: true });

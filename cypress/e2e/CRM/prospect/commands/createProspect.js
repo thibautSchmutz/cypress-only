@@ -40,14 +40,14 @@ module.exports = Cypress.Commands.add(
 
     cy.visit("/");
 
-    cy.wait("@saas_init");
+    cy.wait("@saas_init", { timeout: 200000 });
 
     cy.getByDataBot("menu__contact--prospect-add").as(
       "open_create_prospect_btn"
     );
     cy.get("@open_create_prospect_btn").click({ force: true });
 
-    cy.wait("@create_prospect_modal_renders");
+    cy.wait("@create_prospect_modal_renders", { timeout: 200000 });
 
     cy.get("#corp_name").as("corp_name_input");
     cy.get("@corp_name_input").type(corpName, { force: true });

@@ -30,7 +30,7 @@ describe("contact : update", () => {
     ).as("global_search_input");
     cy.get("@global_search_input").type(searchTerms);
 
-    cy.wait("@search_results");
+    cy.wait("@search_results", { timeout: 200000 });
 
     cy.get(".search-result-item")
       .contains(`${contact.firstname} ${contact.lastName}`)
@@ -38,7 +38,7 @@ describe("contact : update", () => {
 
     cy.get("@contact_link").click({ force: true });
 
-    cy.wait("@get_contact_infos");
+    cy.wait("@get_contact_infos", { timeout: 200000 });
 
     cy.get(".slsy-button").contains("Actions").as("actions_btn");
     cy.get("@actions_btn").click({ force: true });
@@ -46,7 +46,7 @@ describe("contact : update", () => {
     cy.get("li").contains("Modifier le contact").as("update_contact_btn");
     cy.get("@update_contact_btn").click({ force: true });
 
-    cy.wait("@update_contact_modal");
+    cy.wait("@update_contact_modal", { timeout: 200000 });
 
     cy.get("#people_forename").as("firstname_contact_input");
     cy.get("@firstname_contact_input").clear().type(newContact.firstname);

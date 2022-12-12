@@ -4,7 +4,7 @@ module.exports = Cypress.Commands.add("selectProspect", (corpName) => {
   cy.intercept("POST", "/listing/prospects").as("get_propspect_listings");
 
   cy.visit(`/directory/prospects`);
-  cy.wait("@get_propspect_listings");
+  cy.wait("@get_propspect_listings", { timeout: 200000 });
 
   // If active filters, delete them
   cy.get(".leftpane").as("filter_panel");
@@ -16,7 +16,7 @@ module.exports = Cypress.Commands.add("selectProspect", (corpName) => {
       cy.log("Some filters are active");
       cy.get("a.pull-right.semibold").as("filters_reset_btn");
       cy.get("@filters_reset_btn").click({ force: true });
-      cy.wait("@delete_listing_filters");
+      cy.wait("@delete_listing_filters", { timeout: 200000 });
       cy.log("Filters cleared");
     } else {
       cy.log("No active filters");

@@ -16,7 +16,7 @@ describe("client : create", () => {
     // ACT
     cy.createClient(client);
 
-    cy.wait("@get_client_infos");
+    cy.wait("@get_client_infos", { timeout: 200000 });
 
     // ASSERT
     cy.get(".mt-0 > .flex-level > .el-tooltip").as("overview_header");

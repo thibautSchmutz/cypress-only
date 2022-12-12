@@ -28,7 +28,7 @@ describe("contact : delete", () => {
     ).as("global_search_input");
     cy.get("@global_search_input").type(searchTerms);
 
-    cy.wait("@search_results");
+    cy.wait("@search_results", { timeout: 200000 });
 
     cy.get(".search-result-item")
       .contains(`${contact.firstname} ${contact.lastName}`)
@@ -36,7 +36,7 @@ describe("contact : delete", () => {
 
     cy.get("@contact_link").click({ force: true });
 
-    cy.wait("@get_contact_infos");
+    cy.wait("@get_contact_infos", { timeout: 200000 });
 
     cy.get(".slsy-button").contains("Actions").as("actions_btn");
     cy.get("@actions_btn").click({ force: true });
@@ -44,12 +44,12 @@ describe("contact : delete", () => {
     cy.get("li").contains("Supprimer le contact").as("delete_contact_btn");
     cy.get("@delete_contact_btn").click({ force: true });
 
-    cy.wait("@delete_contact_confirmation_modal");
+    cy.wait("@delete_contact_confirmation_modal", { timeout: 200000 });
 
     cy.get(".ui-dialog button").contains("Oui").as("confirm_btn");
     cy.get("@confirm_btn").click({ force: true });
 
-    cy.wait("@contact_listing_page_renders");
+    cy.wait("@contact_listing_page_renders", { timeout: 200000 });
 
     cy.get(".listingContainer").as("listing_container");
     cy.get("@listing_container").should("contain", "Aucun résultat");

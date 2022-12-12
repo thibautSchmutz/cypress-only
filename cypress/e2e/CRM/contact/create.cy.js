@@ -16,7 +16,7 @@ describe("contact : create", () => {
     // ACT
     cy.createContact(contact);
 
-    cy.wait("@get_contact_info");
+    cy.wait("@get_contact_info", { timeout: 200000 });
 
     // ASSERT
     cy.get(".mt-0 > .flex-level > .el-tooltip").as("overview_header");

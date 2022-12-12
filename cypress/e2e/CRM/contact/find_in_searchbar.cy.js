@@ -26,7 +26,7 @@ describe("contact : search", () => {
     ).as("global_search_input");
     cy.get("@global_search_input").type(searchTerms);
 
-    cy.wait("@search_results");
+    cy.wait("@search_results", { timeout: 200000 });
 
     // ASSERT
     cy.get(".fast-search-popover").as("dropdown_results");

@@ -9,7 +9,7 @@ module.export = Cypress.Commands.add(
 
     cy.visit("/onboarding/quicktrial");
 
-    cy.wait("@onboarding_init");
+    cy.wait("@onboarding_init", { timeout: 200000 });
 
     cy.get("label[for='name'] + .el-form-item__content input").as(
       "company_input"

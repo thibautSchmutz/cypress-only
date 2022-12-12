@@ -15,7 +15,7 @@ describe("contact : find in listing", () => {
     cy.intercept("POST", "/listing/people").as("getListingInfos");
 
     cy.visit("/directory/contacts");
-    cy.wait("@getListingInfos");
+    cy.wait("@getListingInfos", { timeout: 200000 });
 
     // ACT
     cy.get(".leftpane").as("filter_panel");

@@ -32,14 +32,14 @@ describe("client : update", () => {
     ).as("global_search_input");
     cy.get("@global_search_input").type(searchTerms);
 
-    cy.wait("@search_results");
+    cy.wait("@search_results", { timeout: 200000 });
 
     cy.get(".mt-3 > .my-1 > .hover-primary-05-bkg > .pointer > .flex-level").as(
       "client_result_link"
     );
     cy.get("@client_result_link").click({ force: true });
 
-    cy.wait("@overview_loaded");
+    cy.wait("@overview_loaded", { timeout: 200000 });
 
     cy.findByText("Actions").as("overview_action_btn");
     cy.get("@overview_action_btn").click({ force: true });
@@ -47,7 +47,7 @@ describe("client : update", () => {
     cy.findByText("Modifier la société").as("update_client_info_btn");
     cy.get("@update_client_info_btn").click({ force: true });
 
-    cy.wait("@update_client_generic_request");
+    cy.wait("@update_client_generic_request", { timeout: 200000 });
 
     cy.get("#third_mobile").as("mobile_input");
     cy.get("@mobile_input").clear().type(newClient.mobile);

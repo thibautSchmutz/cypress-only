@@ -26,7 +26,7 @@ describe("contact : has overview", () => {
     ).as("global_search_input");
     cy.get("@global_search_input").type(searchTerms);
 
-    cy.wait("@search_results");
+    cy.wait("@search_results", { timeout: 200000 });
 
     cy.get(".search-result-item")
       .contains(`${contact.firstname} ${contact.lastName}`)
@@ -34,7 +34,7 @@ describe("contact : has overview", () => {
 
     cy.get("@contact_link").click({ force: true });
 
-    cy.wait("@overview_loaded");
+    cy.wait("@overview_loaded", { timeout: 200000 });
 
     // ASSERT
     cy.get(".overview-root > header").as("overview_header");

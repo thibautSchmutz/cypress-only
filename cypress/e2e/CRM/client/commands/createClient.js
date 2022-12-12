@@ -19,12 +19,12 @@ module.export = Cypress.Commands.add(
 
     cy.visit("/");
 
-    cy.wait("@saas_init");
+    cy.wait("@saas_init", { timeout: 200000 });
 
     cy.getByDataBot("menu__contact--client-add").as("open_create_client_btn");
     cy.get("@open_create_client_btn").click({ force: true });
 
-    cy.wait("@create_client_modal_renders");
+    cy.wait("@create_client_modal_renders", { timeout: 200000 });
 
     cy.get("#isPerson").as("individual_checkbox");
     cy.get("@individual_checkbox").click({ force: true });
@@ -65,7 +65,7 @@ module.export = Cypress.Commands.add(
     cy.get(".ui-dialog-buttonset > .btn-primary").as("submit_btn");
     cy.get("@submit_btn").click({ force: true });
 
-    cy.wait("@get_client_infos");
+    cy.wait("@get_client_infos", { timeout: 200000 });
 
     cy.log("Client created");
   }

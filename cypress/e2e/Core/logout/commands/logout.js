@@ -9,7 +9,7 @@ module.exports = Cypress.Commands.add("logout", () => {
     .contains("Se déconnecter")
     .click({ force: true });
 
-  cy.wait("@logout_request");
+  cy.wait("@logout_request", { timeout: 200000 });
 
   cy.log("Logged OUT");
 
